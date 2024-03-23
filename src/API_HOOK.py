@@ -4,11 +4,16 @@ import pandas as pd
 import json
 from dotenv import load_dotenv
 from datetime import date, datetime, timedelta
+import mysql.connector
 
-load_dotenv('/Users/levert/Code/Data Projects/ringier/sdc-technicalAssignment-data-engineering/secrets-file/.env')
+load_dotenv('/src/secrets-file/.env')
 
 NEWS_API_KEY= os.getenv('NEWS_API_KEY')
 
+db = mysql.connector.connect(host = 'mydb', user = 'root', password = 'root', port = 3306)
+print("DB connected")
+
+print("DB connected")
 last_week = datetime.now() - timedelta(days=7)
 
 start = last_week - timedelta(days=last_week.weekday())
@@ -27,9 +32,10 @@ response = requests.get(url)
 
 elevations = response.json()
 
-data = json.dumps(elevations['articles'])
-
 df = pd.json_normalize(elevations['articles'], errors='ignore')
 
 print(df)
+
+
+
 
